@@ -1,22 +1,20 @@
-// TMDB API key used to authenticate every request
-const tmdbKey = 'Put Free API Key Here from themoviedb.org and it will run';
-// Base URL for TMDB API v3; endpoints get added to the end
-const tmdbBaseUrl = 'https://api.themoviedb.org/3';
-const playBtn = document.getElementById('playBtn');
+// your TMDB key goes here (free from themoviedb.org)
+const tmdbKey = "Put Free API Key Here from themoviedb.org and it will run";
+// every endpoint gets added onto this
+const tmdbBaseUrl = "https://api.themoviedb.org/3";
+const playBtn = document.getElementById("playBtn");
 
-// Fetches the list of movie genres from TMDB
+// gets the genre list for the dropdown
 const getGenres = async () => {
-  const genreRequestEndpoint = '/genre/movie/list';
+  const genreRequestEndpoint = "/genre/movie/list";
   const requestParams = `?api_key=${tmdbKey}`;
   const urlToFetch = `${tmdbBaseUrl}${genreRequestEndpoint}${requestParams}`;
 
-  // Request genres and handle any errors
   try {
     const response = await fetch(urlToFetch);
-    // Only use the data if the request succeeded
+    // fetch doesn't throw on a bad key or 404, so check ok first
     if (response.ok) {
       const jsonResponse = await response.json();
-      // Pull out just the genres array
       const genres = jsonResponse.genres;
       return genres;
     }
@@ -25,20 +23,18 @@ const getGenres = async () => {
   }
 };
 
-// Fetches a list of movies that match the selected genre
+// gets a page of movies in whatever genre is picked
 const getMovies = async () => {
   const selectedGenre = getSelectedGenre();
-  const discoverMovieEndpoint = '/discover/movie';
+  const discoverMovieEndpoint = "/discover/movie";
   const requestParams = `?api_key=${tmdbKey}&with_genres=${selectedGenre}`;
   const urlToFetch = `${tmdbBaseUrl}${discoverMovieEndpoint}${requestParams}`;
 
-  // Request movies and handle any errors
   try {
     const response = await fetch(urlToFetch);
-    // Only use the data if the request succeeded
     if (response.ok) {
       const jsonResponse = await response.json();
-      // Pull out just the movies array
+      // the movies live in results
       const movies = jsonResponse.results;
       return movies;
     }
@@ -47,17 +43,15 @@ const getMovies = async () => {
   }
 };
 
-// Fetches the full details for one movie
+// gets the full details for one movie
 const getMovieInfo = async (movie) => {
   const movieId = movie.id;
   const movieEndpoint = `/movie/${movieId}`;
   const requestParams = `?api_key=${tmdbKey}`;
   const urlToFetch = `${tmdbBaseUrl}${movieEndpoint}${requestParams}`;
 
-  // Request movie details and handle any errors
   try {
     const response = await fetch(urlToFetch);
-    // Only use the data if the request succeeded
     if (response.ok) {
       const movieInfo = await response.json();
       return movieInfo;
@@ -67,12 +61,12 @@ const getMovieInfo = async (movie) => {
   }
 };
 
-// Gets a list of movies and ultimately displays the info of a random movie from the list
+// clear the old pick, then show a random movie from the chosen genre
 const showRandomMovie = async () => {
-  const movieInfo = document.getElementById('movieInfo');
+  const movieInfo = document.getElementById("movieInfo");
   if (movieInfo.childNodes.length > 0) {
     clearCurrentMovie();
-  };
+  }
   const movies = await getMovies();
   const randomMovie = getRandomMovie(movies);
   const info = await getMovieInfo(randomMovie);

@@ -2,6 +2,8 @@
 
 Film Finder is a movie recommendation app I built for Codecademy's Full-Stack Engineer path. You pick a genre, hit Let's Play!, and it shows you a random movie from that genre with its poster, title, and overview. Like or dislike it and you get another one.
 
+Live site: https://ktforge.github.io/film-finder/
+
 ## What it does
 
 The genre dropdown fills itself with TMDB's genre list when the page loads.
